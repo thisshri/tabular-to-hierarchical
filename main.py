@@ -42,16 +42,16 @@ for row in td:
         }]
 
 
-pprint(Reportees, indent=2)
 
 Tree = {
     'employeeId': Root[1],
     'name': Root[4],
-    'reportees': []
 }
 
-while len(Reportees.keys()) != 0:
-    print("Len of reportees", len(Reportees.keys()))
-    import pdb; pdb.set_trace()
-    Tree['reportees'] = Reportees.pop([Tree['employeeId']])
-    print("Len of reportees", len(Reportees.keys()))
+print("Len of reportees", len(Reportees.keys()))
+
+foo = Reportees.pop(Tree['employeeId'])
+Tree['reportees'] = foo
+print("Len of reportees", len(Reportees.keys()))
+
+pprint(Tree, indent=2)
