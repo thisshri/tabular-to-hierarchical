@@ -37,4 +37,4 @@ def populate_reportees(reportees_data):
 
 populate_reportees(HierarchyTree['reportees'])
 
-pprint(HierarchyTree, indent=2)
+pprint(HierarchyTree)
