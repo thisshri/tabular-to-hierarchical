@@ -1,0 +1,10 @@
+flake8==3.8.3
+mccabe==0.6.1
+numpy==1.19.1
+pandas==1.1.1
+pycodestyle==2.6.0
+pyflakes==2.2.0
+python-dateutil==2.8.1
+pytz==2020.1
+six==1.15.0
+xlrd==1.2.0
