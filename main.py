@@ -1,16 +1,15 @@
 import pandas
 from pprint import pprint
 
-
 Reportees = {}
 HierarchyTree = None
 
 for row in pandas.read_excel('./hierarchy case/data.xlsx').to_numpy():
-    manager_id = row[5]
     data = {
         'employeeId': row[1],
         'name': row[4],
     }
+    manager_id = row[5]
 
     if not isinstance(manager_id, str):
         HierarchyTree = data
