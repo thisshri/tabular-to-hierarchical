@@ -1,57 +1,40 @@
-'''
-To clarify - you need not create an image - just need a dictionary style representing this tree: e.g. output format
-    {employeeID: xx, name: yy, reportees: [
-        {employeeID: xx1, name: yy1, reportees: [
-            {employeeID: xx11, name: yy22}}
-        ], {employeeID xx2, name: yy2, reportees: []}
-    ],}
-'''
 import pandas
 from pprint import pprint
 
-
-td = pandas.read_excel('./hierarchy case/data.xlsx').to_numpy()
-
-
-def get_manager_id(employee):
-    return employee[5]
-
+table_data = pandas.read_excel('./hierarchy case/data.xlsx').to_numpy()
 
 Reportees = {}
-Root = None
+HierarchyTree = None
 
+for row in table_data:
+    manager_id = row[5]
+    data = {
+        'employeeId': row[1],
+        'name': row[4],
+    }
 
-num = 1
-for row in td:
-    manager_id = get_manager_id(row)
     if not isinstance(manager_id, str):
-        Root = row
+        HierarchyTree = data
         continue
 
     if manager_id in Reportees.keys():
-        Reportees[manager_id].append(
-            {
-                'employeeId': row[1],
-                'name': row[4],
-            }
-        )
+        Reportees[manager_id].append(data)
     else:
-        Reportees[manager_id] = [{
-            'employeeId': row[1],
-            'name': row[4],
-        }]
+        Reportees[manager_id] = [data]
+
+employee_data = Reportees.pop(HierarchyTree['employeeId'])
+HierarchyTree['reportees'] = employee_data
 
 
+def populate_reportees(reportees_data):
+    for reportees in reportees_data:
+        if reportees['employeeId'] in Reportees.keys():
+            reportees['reportees'] = Reportees.pop(reportees['employeeId'])
+            populate_reportees(reportees['reportees'])
+        else:
+            reportees['reportees'] = []
 
-Tree = {
-    'employeeId': Root[1],
-    'name': Root[4],
-}
 
-print("Len of reportees", len(Reportees.keys()))
+populate_reportees(HierarchyTree['reportees'])
 
-foo = Reportees.pop(Tree['employeeId'])
-Tree['reportees'] = foo
-print("Len of reportees", len(Reportees.keys()))
-
-pprint(Tree, indent=2)
+pprint(HierarchyTree, indent=2)
