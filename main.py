@@ -1,12 +1,11 @@
 import pandas
 from pprint import pprint
 
-table_data = pandas.read_excel('./hierarchy case/data.xlsx').to_numpy()
 
 Reportees = {}
 HierarchyTree = None
 
-for row in table_data:
+for row in pandas.read_excel('./hierarchy case/data.xlsx').to_numpy():
     manager_id = row[5]
     data = {
         'employeeId': row[1],
@@ -22,9 +21,6 @@ for row in table_data:
     else:
         Reportees[manager_id] = [data]
 
-employee_data = Reportees.pop(HierarchyTree['employeeId'])
-HierarchyTree['reportees'] = employee_data
-
 
 def populate_reportees(reportees_data):
     for reportees in reportees_data:
@@ -35,6 +31,7 @@ def populate_reportees(reportees_data):
             reportees['reportees'] = []
 
 
+HierarchyTree['reportees'] = Reportees.pop(HierarchyTree['employeeId'])
 populate_reportees(HierarchyTree['reportees'])
 
 pprint(HierarchyTree)
